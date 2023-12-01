@@ -2,16 +2,16 @@ import knex from "knex";
 
 // let portaBanco: unknown = process.env.DB_PORT;
 //Resolver problema com a porta do knex
-
+// Reconfigurar variaveis de ambiente
 const objKnex = knex({
     client: 'pg',
     connection: {
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
+        host: 'localhost',
+        user: 'postgres',
         port: 5432,
-        database: process.env.DB_NAME,
-        password: process.env.DB_PASSWORD
+        database: 'mercadots',
+        password: '123456'
     }
 })
 
-module.exports = objKnex;
+export = objKnex;
