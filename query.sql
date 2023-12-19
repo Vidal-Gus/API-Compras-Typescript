@@ -16,3 +16,4 @@ create table compras (
   );
   
   
+alter table usuario alter column senha type text;

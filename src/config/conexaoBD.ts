@@ -3,7 +3,7 @@ import knex from "knex";
 // let portaBanco: unknown = process.env.DB_PORT;
 //Resolver problema com a porta do knex
 // Reconfigurar variaveis de ambiente
-const objKnex = knex({
+export const objKnex = knex({
     client: 'pg',
     connection: {
         host: 'localhost',
@@ -14,4 +14,3 @@ const objKnex = knex({
     }
 })
 
-export = objKnex;

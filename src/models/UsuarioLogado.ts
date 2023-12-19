@@ -1,4 +1,4 @@
-import objKnex from "../config/conexaoBD"
+import { objKnex } from "../config/conexaoBD"
 
 
 class UsuarioLogado {
