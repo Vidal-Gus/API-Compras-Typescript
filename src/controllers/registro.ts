@@ -25,7 +25,6 @@ const registrarUsuario = async (req: Request, res: Response): Promise<{}> => {
 
         return res.status(200).json(usuario)
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ mensagem: "Erro no servidor" })
     }
 };
