@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { objKnex } from "../config/conexaoBD";
 import { Login } from "../types/Login";
 import bcrypt from 'bcrypt'
 import { UsuarioBanco } from "../types/UsuarioBanco";
 import jwt from 'jsonwebtoken'
+import { prisma } from "../config/conexaoBD";
 
 export const logarUsuario = async (req: Request, res: Response) => {
     const { email, senha }: Login = req.body;
@@ -11,8 +11,9 @@ export const logarUsuario = async (req: Request, res: Response) => {
     if (!email || !senha) {
         return res.status(400).json({ mensagem: "Email e Senha obrigatória para login!" })
     }
+
     try {
-        const usuarioBanco: UsuarioBanco = await objKnex('usuario').where({ email }).first();
+        const usuarioBanco = await prisma.usuario.findFirst({ where: { email } })
 
         if (!usuarioBanco) {
             return res.status(400).json({ mensagem: "Email ou Senha inválidos" })
@@ -23,9 +24,13 @@ export const logarUsuario = async (req: Request, res: Response) => {
         if (!verificarSenha) {
             return res.status(400).json({ mensagem: "Email ou Senha inválidos" })
         }
+        const { senha: _, ...usuario } = usuarioBanco
 
-        // jwt.sign()
+        const passjwt = process.env.JWT ? process.env.JWT : "54321"
 
+        const token = jwt.sign(usuario, passjwt, { expiresIn: '8h' })
+
+        return res.status(200).json({ usuario, token });
 
     } catch (error) {
         console.log(error);

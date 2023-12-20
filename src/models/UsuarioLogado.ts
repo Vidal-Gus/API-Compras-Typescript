@@ -1,4 +1,3 @@
-import { objKnex } from "../config/conexaoBD"
 
 
 class UsuarioLogado {
@@ -11,7 +10,6 @@ class UsuarioLogado {
     }
 
     listarProdutos = async (): Promise<[]> => {
-        const items: object[] = await objKnex('compras').where({ usuaro_id: this.id })
         return []
     }
 
