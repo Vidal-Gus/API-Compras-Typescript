@@ -1,8 +1,19 @@
-
+import { UserVerify } from "../types/UserVerify"
+import { prisma } from "../config/conexaoBD"
 
 class UsuarioLogado {
-    constructor(private nome: string, private email: string, private senha: string, private id: number) {
+    private id: number
+    private nome_usuario: string
+    private email: string
+    private iat: number
+    private exp: number
 
+    constructor(user: UserVerify) {
+        this.id = user.id,
+            this.nome_usuario = user.nome_usuario,
+            this.email = user.email,
+            this.iat = user.iat,
+            this.exp = user.exp
     }
 
     adicionarProduto = (nome: string, preco: number): {} => {

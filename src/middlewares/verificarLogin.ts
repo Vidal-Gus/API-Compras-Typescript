@@ -1,6 +1,16 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from 'jsonwebtoken'
+import jwt, { JsonWebTokenError } from 'jsonwebtoken'
+import { prisma } from "../config/conexaoBD";
 
+async function verificarUsuarioExistente(user: any) {
+    const verificarExistencia = prisma.usuario.findFirst({ where: { id: user.id } });
+    if (!verificarExistencia) {
+        return false
+    }
+
+    return true
+
+}
 
 export async function verificarUsuarioLogado(req: Request, res: Response, next: NextFunction) {
     const { authorization } = req.headers;
@@ -13,21 +23,22 @@ export async function verificarUsuarioLogado(req: Request, res: Response, next: 
         const arrAuth = authorization.split(' ');
         const token = arrAuth[1];
         const passjwt = process.env.JWT_PASS ? process.env.JWT_PASS : "54321"
-        console.log(passjwt);
 
         const user = jwt.verify(token, passjwt)
 
-        console.log(req.body);
-
+        const usuarioExistente = verificarUsuarioExistente(user);
+        if (!usuarioExistente) {
+            return res.status(404).json({ mensagem: "Usuario não encontrado no banco" })
+        }
         req.body.user = user;
-
-        console.log(req.body);
-        //Jogar user para os headers
 
         next()
 
     } catch (error) {
         console.log(error);
+        if (error instanceof (JsonWebTokenError)) {
+            return res.status(400).json({ mensagem: "Houve um problema com seu token! Faça login novamente" })
+        }
         return res.status(500).json({ mensagem: "Erro no servidor!!" })
     }
 }
