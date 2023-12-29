@@ -26,7 +26,7 @@ export const logarUsuario = async (req: Request, res: Response) => {
         }
         const { senha: _, ...usuario } = usuarioBanco
 
-        const passjwt = process.env.JWT ? process.env.JWT : "54321"
+        const passjwt = process.env.JWT_PASS ? process.env.JWT_PASS : "54321"
 
         const token = jwt.sign(usuario, passjwt, { expiresIn: '8h' })
 
