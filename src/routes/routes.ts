@@ -3,16 +3,14 @@ import { Request, Response } from "express";
 import registrarUsuario from "../controllers/registro";
 import { logarUsuario } from "../controllers/login";
 import { verificarUsuarioLogado } from "../middlewares/verificarLogin";
-const routes = Router();
+import { adicionarProdutoUsuario } from "../controllers/operacoesUsuario";
+const routes = Router()
 
 routes.post('/registro', registrarUsuario)
 routes.post('/login', logarUsuario)
-routes.use(verificarUsuarioLogado);
 
-routes.get('/teste', (req: Request, res: Response) => {
-    console.log(req.body.user);
+routes.use(verificarUsuarioLogado)
 
-    return res.json({ mensagem: "Teste de rota" })
-})
+routes.post('/adicionarProduto', adicionarProdutoUsuario)
 
 export default routes

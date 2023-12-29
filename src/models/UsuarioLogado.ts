@@ -1,7 +1,7 @@
 import { UserVerify } from "../types/UserVerify"
 import { prisma } from "../config/conexaoBD"
 
-class UsuarioLogado {
+export class UsuarioLogado {
     private id: number
     private nome_usuario: string
     private email: string
@@ -16,19 +16,26 @@ class UsuarioLogado {
             this.exp = user.exp
     }
 
-    adicionarProduto = (nome: string, preco: number): {} => {
-        return {}
+    adicionarProduto = async (nome: string, preco: number): Promise<{}> => {
+        try {
+            const produtoAdicionado = await prisma.compras.create({ data: { nome_item: nome, preco, usuario_id: this.id } })
+
+            return produtoAdicionado
+        } catch (error) {
+            console.log(error)
+            return false
+        }
     }
 
     listarProdutos = async (): Promise<[]> => {
         return []
     }
 
-    atualizarProduto = (nome: string, preco: number, id: number): {} => {
+    atualizarProduto = async (nome: string, preco: number, id: number): Promise<{}> => {
         return {}
     }
 
-    deletarProduto = (id: number) => {
+    deletarProduto = async (id: number) => {
 
     }
 

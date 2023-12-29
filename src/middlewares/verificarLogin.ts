@@ -3,7 +3,7 @@ import jwt, { JsonWebTokenError } from 'jsonwebtoken'
 import { prisma } from "../config/conexaoBD";
 
 async function verificarUsuarioExistente(user: any) {
-    const verificarExistencia = prisma.usuario.findFirst({ where: { id: user.id } });
+    const verificarExistencia = await prisma.usuario.findFirst({ where: { id: user.id } });
     if (!verificarExistencia) {
         return false
     }
@@ -26,10 +26,11 @@ export async function verificarUsuarioLogado(req: Request, res: Response, next: 
 
         const user = jwt.verify(token, passjwt)
 
-        const usuarioExistente = verificarUsuarioExistente(user);
+        const usuarioExistente = await verificarUsuarioExistente(user);
         if (!usuarioExistente) {
             return res.status(404).json({ mensagem: "Usuario não encontrado no banco" })
         }
+
         req.body.user = user;
 
         next()
